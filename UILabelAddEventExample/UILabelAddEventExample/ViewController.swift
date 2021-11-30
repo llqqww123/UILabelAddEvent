@@ -17,8 +17,9 @@ class ViewController: UIViewController {
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         label.isUserInteractionEnabled = true
+        label.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 20
         
-        let string1 = "string1"
+        let string1 = "string1string1string1string1string1string1"
         let string2 = "string2"
         let attString1 = NSAttributedString(string: string1, attributes: [.foregroundColor: UIColor.green, .font: UIFont.systemFont(ofSize: 14, weight: .regular)])
         let attString2 = NSAttributedString(string: string2, attributes: [.foregroundColor: UIColor.red, .font: UIFont.systemFont(ofSize: 17, weight: .regular)])
@@ -47,7 +48,9 @@ class ViewController: UIViewController {
     }
     
     func initial() {
-        label.addSingleTapEvent(tapString: servicePhoneNum)
+        label.addSingleTapEvent(tapString: servicePhoneNum) { isMatch in
+            
+        }
     }
 }
 

@@ -22,16 +22,30 @@ extension UILabel {
         }
     }
     
+    // 响应事件
+    private static var singleTapHandleKey: String = "singleTapHandleKey"
+    private var singleTapHandle: (Bool)->Void? {
+        set {
+            objc_setAssociatedObject(self, &UILabel.singleTapHandleKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        
+        get {
+            return ((objc_getAssociatedObject(self, &UILabel.singleTapHandleKey)) as? (Bool)->Void)!
+        }
+    }
+    
     // 添加单击事件
-    public func addSingleTapEvent(tapString: String = "") {
+    public func addSingleTapEvent(tapString: String = "", handle: @escaping (Bool)->Void) {
         singleTapString = tapString
+        singleTapHandle = handle
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(singleTap(_:))))
     }
     
     // 单机事件响应
     @objc func singleTap(_ sender: UITapGestureRecognizer) {
         let range: NSRange = NSString(string: text ?? "").range(of: singleTapString ?? "")
-        print(didTapAttributedTextInLabel(label: self, tap: sender, inRange: range))
+        let isMatch: Bool = didTapAttributedTextInLabel(label: self, tap: sender, inRange: range)
+        singleTapHandle(isMatch)
     }
     
     // 判断点击位置
