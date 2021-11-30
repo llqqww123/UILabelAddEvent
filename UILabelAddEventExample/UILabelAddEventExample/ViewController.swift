@@ -11,6 +11,8 @@ import SnapKit
 class ViewController: UIViewController {
     
     let servicePhoneNum: String = "400-921-5767"
+    let string1 = "string1string1string1string1string1string1"
+    let string2 = "string2"
     
     lazy var label: UILabel = {
         let label = UILabel()
@@ -19,8 +21,6 @@ class ViewController: UIViewController {
         label.isUserInteractionEnabled = true
         label.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 20
         
-        let string1 = "string1string1string1string1string1string1"
-        let string2 = "string2"
         let attString1 = NSAttributedString(string: string1, attributes: [.foregroundColor: UIColor.green, .font: UIFont.systemFont(ofSize: 14, weight: .regular)])
         let attString2 = NSAttributedString(string: string2, attributes: [.foregroundColor: UIColor.red, .font: UIFont.systemFont(ofSize: 17, weight: .regular)])
         let attText = NSMutableAttributedString(attributedString: attString1)
@@ -48,8 +48,16 @@ class ViewController: UIViewController {
     }
     
     func initial() {
-        label.addSingleTapEvent(tapString: servicePhoneNum) { isMatch in
-            
+        label.addSingleTapEvent(tapString: servicePhoneNum) {
+            print("点击了servicePhoneNum")
+        }
+        
+        label.addSingleTapEvent(tapString: string1) {
+            print("点击了string1")
+        }
+        
+        label.addSingleTapEvent(tapString: string2) {
+            print("点击了string2")
         }
     }
 }

@@ -10,42 +10,56 @@ import UIKit
 //MARK: 单击
 extension UILabel {
     
-    // 确认单机字符串
-    private static var singleTapStringKey: String = "singleTapStringKey"
-    private var singleTapString: String? {
+    // 是否是第一次添加事件
+    private static var hasTapEventKey: String = "hasTapEventKey"
+    private var hasTap: Bool? {
         set {
-            objc_setAssociatedObject(self, &UILabel.singleTapStringKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &UILabel.hasTapEventKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         
         get {
-            return (objc_getAssociatedObject(self, &UILabel.singleTapStringKey)) as? String
+            return (objc_getAssociatedObject(self, &UILabel.hasTapEventKey)) as? Bool
         }
     }
     
-    // 响应事件
-    private static var singleTapHandleKey: String = "singleTapHandleKey"
-    private var singleTapHandle: (Bool)->Void? {
+    // 单机事件集合(存储所有添加的点击事件)
+    private static var singleTapEventsDicKey: String = "singleTapEventsDicKey"
+    private var singleTapEventsDic: [String: ()->Void]? {
         set {
-            objc_setAssociatedObject(self, &UILabel.singleTapHandleKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &UILabel.singleTapEventsDicKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         
         get {
-            return ((objc_getAssociatedObject(self, &UILabel.singleTapHandleKey)) as? (Bool)->Void)!
+            return (objc_getAssociatedObject(self, &UILabel.singleTapEventsDicKey)) as? [String: ()->Void]
         }
     }
     
     // 添加单击事件
-    public func addSingleTapEvent(tapString: String = "", handle: @escaping (Bool)->Void) {
-        singleTapString = tapString
-        singleTapHandle = handle
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(singleTap(_:))))
+    public func addSingleTapEvent(tapString: String = "", handle: @escaping ()->Void) {
+        
+        if let _ = singleTapEventsDic {
+            singleTapEventsDic![tapString] = handle
+        }else {
+            singleTapEventsDic = [String: ()->Void]()
+            singleTapEventsDic![tapString] = handle
+        }
+        
+        // 判断是否已经添加过单机事件
+        if !(hasTap ?? false) {
+            hasTap = true
+            addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(singleTap(_:))))
+        }
     }
     
     // 单机事件响应
     @objc func singleTap(_ sender: UITapGestureRecognizer) {
-        let range: NSRange = NSString(string: text ?? "").range(of: singleTapString ?? "")
-        let isMatch: Bool = didTapAttributedTextInLabel(label: self, tap: sender, inRange: range)
-        singleTapHandle(isMatch)
+        for key in singleTapEventsDic!.keys {
+            let range: NSRange = NSString(string: text ?? "").range(of: key)
+            let isMatch: Bool = didTapAttributedTextInLabel(label: self, tap: sender, inRange: range)
+            if isMatch {
+                singleTapEventsDic![key]!()
+            }
+        }
     }
     
     // 判断点击位置
