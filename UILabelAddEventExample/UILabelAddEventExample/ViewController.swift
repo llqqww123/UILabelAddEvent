@@ -48,16 +48,28 @@ class ViewController: UIViewController {
     }
     
     func initial() {
-        label.addSingleTapEvent(tapString: servicePhoneNum) {
+        label.addSingleTapEvent(string: servicePhoneNum) {
             print("点击了servicePhoneNum")
         }
         
-        label.addSingleTapEvent(tapString: string1) {
+        label.addSingleTapEvent(string: string1) {
             print("点击了string1")
         }
         
-        label.addSingleTapEvent(tapString: string2) {
+        label.addSingleTapEvent(string: string2) {
             print("点击了string2")
+        }
+        
+        label.addLongPressEvent(string: servicePhoneNum) {
+            print("长按了servicePhoneNum")
+        }
+        
+        label.addLongPressEvent(string: string1) {
+            print("长按了string1")
+        }
+        
+        label.addLongPressEvent(string: string2) {
+            print("长按了string2")
         }
     }
 }
