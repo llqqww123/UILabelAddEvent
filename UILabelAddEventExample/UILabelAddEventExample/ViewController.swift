@@ -21,12 +21,16 @@ class ViewController: UIViewController {
         label.isUserInteractionEnabled = true
         label.preferredMaxLayoutWidth = UIScreen.main.bounds.width - 20
         
+        // attributedText
         let attString1 = NSAttributedString(string: string1, attributes: [.foregroundColor: UIColor.green, .font: UIFont.systemFont(ofSize: 14, weight: .regular)])
         let attString2 = NSAttributedString(string: string2, attributes: [.foregroundColor: UIColor.red, .font: UIFont.systemFont(ofSize: 40, weight: .regular)])
         let attText = NSMutableAttributedString(attributedString: attString1)
         attText.append(NSAttributedString(string: servicePhoneNum, attributes: [.foregroundColor: UIColor.blue, .font: UIFont.systemFont(ofSize: 20, weight: .regular), .underlineStyle: NSUnderlineStyle.single.rawValue, .underlineColor: UIColor.blue]))
         attText.append(attString2)
         label.attributedText = attText
+        
+        // text
+//        label.text = string1 + servicePhoneNum + string2
         
         return label
     }()

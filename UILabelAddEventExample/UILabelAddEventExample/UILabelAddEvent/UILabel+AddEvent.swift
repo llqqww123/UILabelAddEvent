@@ -97,7 +97,7 @@ extension UILabel {
             longPressEventsDic![string] = handle
         }
         
-        // 判断是否已经添加过单机事件
+        // 判断是否已经添加过长按事件
         if !(hasLongPress ?? false) {
             hasLongPress = true
             let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPress(_:)))
@@ -105,7 +105,7 @@ extension UILabel {
         }
     }
     
-    // 单机事件响应
+    // 长按事件响应
     @objc func longPress(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
